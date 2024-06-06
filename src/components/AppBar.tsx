@@ -1,14 +1,24 @@
 import React from 'react';
 import { globalStyles } from '../styles/styles';
+import { useNavigate } from 'react-router-dom';
 
 const AppBar = () => {
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        console.log('Logout');
+        navigate('/login');
+    }
+
 	return (
 		<>
 			<div style={styles.appBar}>
 				<p style={globalStyles.text}>SSNS</p>
 
 			<div style={styles.logout}>
-				<button style={styles.button}>Logout</button>
+				<button 
+                style={styles.button}
+                onClick={handleLogout}
+                >Logout</button>
 			</div>
 			</div>
 		</>

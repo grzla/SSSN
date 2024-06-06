@@ -4,10 +4,8 @@ import { globalStyles } from '../styles/styles';
 const CreatePostModal = () => {
 	return (
 		<div>
-			<h1>Create Post</h1>
-			<form>
+			<form >
 				<label>
-					Post:
 					<p style={globalStyles.text}>Create Your Post</p>
 					<textarea style={styles.textArea} />
 				</label>
@@ -21,7 +19,6 @@ export const styles = {
 	textArea: {
 		width: '100%',
 		height: '100px',
-		marginBottom: '10px',
 		backgroundColor: '#f9f9f9',
 		color: '#14171a',
 	},
@@ -30,6 +27,7 @@ export const styles = {
 		padding: '20px',
 		borderRadius: '5px',
 		width: '300px',
+    marginBottom: '20px',
 	},
 	input: {
 		width: '100%',
