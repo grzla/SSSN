@@ -1,5 +1,6 @@
 import React from "react";
 import {globalStyles} from "../../styles/styles";  
+import FeedContainer from "../../components/FeedContainer";
 
 const Feed = () => {
     return (
@@ -8,16 +9,7 @@ const Feed = () => {
                 <p>Profile</p>
                 <p>More options...</p>
             </div> */}
-            <div style={styles.container}>
-                <div id="feed" style={styles.feedContainer}>
-                    <h2>Feed</h2>
-                    <p style={globalStyles.text}>Feed content goes here</p>
-                </div>
-                {/* <div id="friends">
-                    <h2>Friends</h2>
-                    <p>Friends list goes here</p>
-                </div> */}
-            </div>
+            <FeedContainer />
             {/* <div style={styles.sidebar}> 
                 <p>Trends</p>
                 <p>Who to follow</p>
@@ -36,15 +28,6 @@ export const styles = {
         height: '100vh',
         backgroundColor: '#fff', 
         width: '100vw', 
-    },
-    feedContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        padding: '20px',
-        height: '100vh',
     },
     container: {
         backgroundColor: 'transparent',
