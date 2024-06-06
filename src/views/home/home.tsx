@@ -5,15 +5,9 @@ import FeedContainer from "../../components/FeedContainer";
 const Feed = () => {
     return (
         <div style={styles.page}>
-            {/* <div style={styles.sidebar}> 
-                <p>Profile</p>
-                <p>More options...</p>
-            </div> */}
+            <div style={styles.container}>
             <FeedContainer />
-            {/* <div style={styles.sidebar}> 
-                <p>Trends</p>
-                <p>Who to follow</p>
-            </div> */}
+            </div>
         </div>
     );
 }
@@ -34,8 +28,6 @@ export const styles = {
         width: '600px',
         display: 'flex',
         flexDirection: 'column',
-        border: '1px solid #e1e8ed', 
-        margin: '0 20px', // Margin between sidebars and the feed
     },
     sidebar: {
         width: '200px', // Sidebar width

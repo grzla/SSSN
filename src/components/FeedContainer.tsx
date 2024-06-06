@@ -1,17 +1,14 @@
 import React from "react";
 import { globalStyles } from "../styles/styles";   
+import CreatePost from "./CreatePost";    
 
 const FeedContainer = () => {
     return (
         <div>
-            <h1>Feed</h1>
+            <h1 style={globalStyles.text}>See What's Happening!</h1>
+            <CreatePost />
                 <div id="feed" style={styles.feedContainer}>
-                    <h2>Feed</h2>
                     <p style={globalStyles.text}>Feed content goes here</p>
-                {/* <div id="friends">
-                    <h2>Friends</h2>
-                    <p>Friends list goes here</p>
-                </div> */}
             </div>
         </div>
     );
@@ -29,6 +26,5 @@ export const styles = {
         width: '100%',
         height: '100%',
         border: '1px solid #e1e8ed', 
-
     },
 };
