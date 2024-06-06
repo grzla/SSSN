@@ -4,7 +4,7 @@ import { UserProvider } from "./contexts/UserContext";
 import Home from "./views/home.js";
 import Login from "./views/auth/login";
 import Signup from "./views/auth/signup";
-
+import Feed from "./views/feed/feed";
 const App: React.FC = () => (
   <UserProvider>
     <BrowserRouter>
@@ -13,6 +13,7 @@ const App: React.FC = () => (
         <Route path="/home" Component={Home} />
         <Route path="/login" Component={Login} />
         <Route path="/signup" Component={Signup} />
+        <Route path="/feed" Component={Feed} />
       </Routes>
     </BrowserRouter>
   </UserProvider>
