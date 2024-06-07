@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { globalStyles } from '../styles/styles';
 import axios from 'axios';
 
 
 const CreatePostModal = () => {
+	const formRef = useRef<HTMLFormElement>(null);
 
 	const handleSubmit = (event: React.FormEvent) => {
-		event.preventDefault();
-		const data = new FormData(event.target as HTMLFormElement);
+	  event.preventDefault();
+	  if (formRef.current) {
+		const data = new FormData(formRef.current);
 		const post = {
-			content: data.get('content'),
-			user_id: 1, 
+		  user_id: 1, 
+		  content: data.get('content') as string,
 		};
 		axios.post('http://localhost:3001/submit-post', post)
-			.then((response) => {
-				console.log(response);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		  .then((response) => {
+			console.log(response);
+		  })
+		  .catch((error) => {
+			console.log(error);
+		  });
+	  }
 	};
+
 
 	return (
 		<div>
