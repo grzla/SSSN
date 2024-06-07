@@ -47,6 +47,19 @@ app.post('/submit-post', (req, res) => {
   });
 });
 
+app.get('/posts', (req, res) => {
+  const query = 'SELECT * FROM posts';
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Server error');
+    } else {
+      res.status(200).send(result);
+    }
+  }
+  );
+});
+
 
 // Login route
 app.post('/login', (req, res) => {
