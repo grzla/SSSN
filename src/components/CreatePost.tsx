@@ -1,7 +1,26 @@
 import React from 'react';
 import { globalStyles } from '../styles/styles';
+import axios from 'axios';
+
 
 const CreatePostModal = () => {
+
+	const handleSubmit = (event: React.FormEvent) => {
+		event.preventDefault();
+		const data = new FormData(event.target as HTMLFormElement);
+		const post = {
+			content: data.get('content'),
+		};
+		axios.post('http://localhost:3001/posts', post)
+			.then((response) => {
+				console.log(response);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+
 	return (
 		<div>
 			<form >

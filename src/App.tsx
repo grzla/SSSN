@@ -4,7 +4,7 @@ import { UserProvider } from './contexts/UserContext';
 import Home from './views/home.js';
 import Login from './views/auth/login';
 import Signup from './views/auth/signup';
-import Feed from './views/home/home';
+import Feed from './views/home/dashboard';
 const App: React.FC = () => (
 	<UserProvider>
 		<BrowserRouter>
