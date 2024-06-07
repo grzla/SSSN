@@ -2,7 +2,6 @@ import React from 'react';
 import { globalStyles } from '../styles/styles';
 import axios from 'axios';
 
-
 const CreatePostModal = () => {
 
 	const handleSubmit = (event: React.FormEvent) => {
@@ -10,8 +9,9 @@ const CreatePostModal = () => {
 		const data = new FormData(event.target as HTMLFormElement);
 		const post = {
 			content: data.get('content'),
+			user_id: 1, 
 		};
-		axios.post('http://localhost:3001/posts', post)
+		axios.post('http://localhost:3001/submit-post', post)
 			.then((response) => {
 				console.log(response);
 			})
@@ -20,15 +20,14 @@ const CreatePostModal = () => {
 			});
 	};
 
-
 	return (
-		<div>
-			<form >
+		<div style={styles.form}>
+			<form onSubmit={handleSubmit}>
 				<label>
 					<p style={globalStyles.text}>Create Your Post</p>
-					<textarea style={styles.textArea} />
+					<textarea name="content" style={styles.textArea} />
 				</label>
-				<input type="submit" value="Submit" />
+				<input type="submit" value="Submit" style={styles.input} />
 			</form>
 		</div>
 	);
@@ -46,7 +45,7 @@ export const styles = {
 		padding: '20px',
 		borderRadius: '5px',
 		width: '300px',
-    marginBottom: '20px',
+    	marginBottom: '20px',
 	},
 	input: {
 		width: '100%',

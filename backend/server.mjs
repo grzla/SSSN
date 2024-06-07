@@ -23,12 +23,20 @@ connection.connect((err) => {
 });
 
 
-// Submit Post route
 app.post('/submit-post', (req, res) => {
-    const { title, content } = req.body;
-  
-    const query = 'INSERT INTO posts (title, content) VALUES (?, ?)';
-    connection.query(query, [title, content], (err, result) => {
+  const { user_id, content } = req.body;
+
+  // Verify user_id is valid
+  const userQuery = 'SELECT * FROM users WHERE user_id = ?';
+  connection.query(userQuery, [user_id], (userErr, userResult) => {
+    if (userErr || userResult.length === 0) {
+      console.error(userErr);
+      return res.status(400).send('Invalid user ID');
+    }
+
+    const created_at = new Date();
+    const query = 'INSERT INTO posts (user_id, content, created_at) VALUES (?, ?, ?)';
+    connection.query(query, [user_id, content, created_at], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Server error');
@@ -37,6 +45,8 @@ app.post('/submit-post', (req, res) => {
       }
     });
   });
+});
+
 
 // Login route
 app.post('/login', (req, res) => {
@@ -73,5 +83,5 @@ app.post('/signup', (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log('Server is running on port 5000');
+  console.log('Server is running on port ${process.env.PORT}');
 });
