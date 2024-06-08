@@ -95,6 +95,47 @@ app.post('/signup', (req, res) => {
   });
 });
 
+
+app.post('/posts/:post_id', (req, res) => {
+  // Increment the likes count for the post with the given ID
+  connection.query('SELECT * FROM posts WHERE post_id = ?', [req.params.post_id], (error, results) => {
+    // UPDATE posts SET likes = likes + 1 WHERE post_id = ?', [req.params.post_id], (error, results) => {
+    if (error) {
+      return res.status(500).send({ success: false, message: 'An error occurred' });
+    }
+    res.send({ success: true, post: results[0] });
+  });
+});
+
+app.post('/posts/:post_id/like', (req, res) => {
+  // Increment the likes count for the post with the given ID
+  connection.query('UPDATE posts SET likes = likes + 1 WHERE post_id = ?', [req.params.post_id], (error, results) => {
+    if (error) {
+      return res.status(500).send({ success: false, message: 'An error occurred' });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).send({ success: false, message: 'Post not found' });
+    }
+
+    res.send({ success: true });
+  });
+});
+
+app.post('/posts/:post_id/dislike', (req, res) => {
+  // Decrement the likes count for the post with the given ID
+  connection.query('UPDATE posts SET likes = likes - 1 WHERE post_id = ?', [req.params.post_id], (error, results) => {
+    if (error) {
+      return res.status(500).send({ success: false, message: 'An error occurred' });
+      }
+    if (results.affectedRows === 0) {
+      return res.status(404).send({ success: false, message: 'Post not found' });
+    }
+
+    res.send({ success: true });
+  });
+});
+
 app.listen(process.env.PORT, () => {
-  console.log('Server is running on port ${process.env.PORT}');
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
