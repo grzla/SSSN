@@ -5,7 +5,6 @@ const DislikeButton: React.FC<{ post_id: string }> = ({ post_id }) => {
 
   const handleDislike = () => {
     setLikes(likes - 1);
-    console.log("Disliking post", post_id);
     fetch(`http://127.0.0.1:3001/posts/${post_id}/dislike`, {
       method: "POST",
     })

@@ -11,7 +11,7 @@ const Signup = () => {
       console.log("Passwords do not match");
     } else {
       try {
-        const response = await fetch("http://localhost:5000/signup", {
+        const response = await fetch("http://localhost:3001/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

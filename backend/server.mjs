@@ -96,15 +96,17 @@ app.post('/signup', (req, res) => {
 });
 
 
-app.post('/posts/:post_id', (req, res) => {
+app.get('/posts/:post_id', (req, res) => {
   // Increment the likes count for the post with the given ID
+  console.log(`trying to get /posts/:${req.params.post_id}`)
   connection.query('SELECT * FROM posts WHERE post_id = ?', [req.params.post_id], (error, results) => {
     // UPDATE posts SET likes = likes + 1 WHERE post_id = ?', [req.params.post_id], (error, results) => {
-    if (error) {
-      return res.status(500).send({ success: false, message: 'An error occurred' });
-    }
-    res.send({ success: true, post: results[0] });
-  });
+      if (results.length > 0) {
+        res.send({ success: true, username: results[0].username });
+      } else {
+        res.status(404).send({ success: false, message: 'User not found' });
+      }
+    });
 });
 
 app.post('/posts/:post_id/like', (req, res) => {
@@ -133,6 +135,23 @@ app.post('/posts/:post_id/dislike', (req, res) => {
     }
 
     res.send({ success: true });
+  });
+});
+
+app.get('/username/:user_id', (req, res) => {
+  // get the username for the user with the given user_id
+  connection.query('SELECT username FROM users WHERE user_id = ?', [req.params.user_id], (error, results) => {
+    if (error) {
+      return res.status(500).send({ success: false, message: 'An error occurred' });
+    }
+    console.log(`results of username query: ${results[0].username}`);
+    if (results.length > 0) {
+      console.log(results[0]);
+      const username = results[0].username;
+      res.send({ success: true, username: username });
+    } else {
+      res.status(404).send({ success: false, message: 'User not found' });
+    }
   });
 });
 
