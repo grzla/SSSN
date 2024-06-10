@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import LikeCount from "./LikeCount";
+import { Link } from "react-router-dom";
 // import LikeButton from "./LikeButton";
 // import DislikeButton from "./DislikeButton";
 
@@ -80,8 +81,12 @@ const Post = ({ post }: PostProps) => {
   return (
     <div style={styles.postContainer}>
       <p style={styles.content}>{updatedPost.content}</p>
-      <p style={styles.meta}>
+      {/* <p style={styles.meta}>
         Posted by {username} at{" "}
+        {new Date(updatedPost.created_at).toLocaleString()}
+      </p> */}
+      <p style={styles.meta}>
+        Posted by <Link to={`/feed/${username}`}>{username}</Link> at{" "}
         {new Date(updatedPost.created_at).toLocaleString()}
       </p>
       <button onClick={handleLike}>Like</button>

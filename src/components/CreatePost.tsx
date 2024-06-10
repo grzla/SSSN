@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { globalStyles } from "../styles/styles";
 import axios from "axios";
 
-const CreatePostModal = () => {
+const CreatePostModal = ({ onPostCreated }) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -17,6 +17,8 @@ const CreatePostModal = () => {
         .post("http://localhost:3001/submit-post", post)
         .then((response) => {
           console.log(response);
+          // Call the function passed in through props
+          onPostCreated();
         })
         .catch((error) => {
           console.log(error);

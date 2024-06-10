@@ -109,6 +109,28 @@ app.get('/posts/:post_id', (req, res) => {
     });
 });
 
+app.get('/posts/:username', (req, res) => { 
+  // query the users database to get the user_id for the given username, then query the posts database to get all posts with that user_id
+  connection.query('SELECT user_id FROM users WHERE username = ?', [req.params.username], (error, results) => {
+    if (error) {
+      return res.status(500).send({ success: false, message: 'An error occurred' });
+    }
+
+    if (results.length > 0) {
+      const user_id = results[0].user_id;
+      connection.query('SELECT * FROM posts WHERE user_id = ?', [user_id], (error, results) => {
+        if (error) {
+          return res.status(500).send({ success: false, message: 'An error occurred' });
+        }
+
+        res.send({ success: true, posts: results });
+      });
+    } else {
+      res.status(404).send({ success: false, message: 'User not found' });
+    }
+  });
+});
+
 app.post('/posts/:post_id/like', (req, res) => {
   // Increment the likes count for the post with the given ID
   connection.query('UPDATE posts SET likes = likes + 1 WHERE post_id = ?', [req.params.post_id], (error, results) => {

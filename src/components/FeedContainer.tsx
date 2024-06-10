@@ -7,7 +7,7 @@ import axios from "axios";
 const FeedContainer = () => {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
+  const fetchPosts = () => {
     axios
       .get("http://localhost:3001/posts")
       .then((response) => {
@@ -16,19 +16,23 @@ const FeedContainer = () => {
       .catch((error) => {
         console.error("Error fetching posts:", error);
       });
-  }, []);
+  };
+
+  useEffect(fetchPosts, []);
 
   return (
     <>
       <div style={styles.container}>
         <p style={styles.header}>See What's Happening!</p>
         <div style={styles.CreatePostContainer}>
-          <CreatePost />
+          <CreatePost onPostCreated={fetchPosts} />
         </div>
       </div>
       <div id="feed" style={styles.feed}>
         {posts.length > 0 ? (
-          posts.map((post) => <Post key={post.post_id} post={post} />)
+          posts
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            .map((post) => <Post key={post.post_id} post={post} />)
         ) : (
           <p style={globalStyles.text}>No posts available</p>
         )}
@@ -36,6 +40,41 @@ const FeedContainer = () => {
     </>
   );
 };
+
+// const FeedContainer = () => {
+//   const [posts, setPosts] = useState([]);
+
+//   useEffect(() => {
+//     axios
+//       .get("http://localhost:3001/posts")
+//       .then((response) => {
+//         setPosts(response.data);
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching posts:", error);
+//       });
+//   }, []);
+
+//   return (
+//     <>
+//       <div style={styles.container}>
+//         <p style={styles.header}>See What's Happening!</p>
+//         <div style={styles.CreatePostContainer}>
+//           <CreatePost />
+//         </div>
+//       </div>
+//       <div id="feed" style={styles.feed}>
+//         {posts.length > 0 ? (
+//           posts
+//             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+//             .map((post) => <Post key={post.post_id} post={post} />)
+//         ) : (
+//           <p style={globalStyles.text}>No posts available</p>
+//         )}
+//       </div>
+//     </>
+//   );
+// };
 
 export default FeedContainer;
 
