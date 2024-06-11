@@ -18,6 +18,7 @@ const FeedContainer = () => {
       });
   };
 
+  // without this, the fetchPosts would not be called when the component mounts.
   useEffect(fetchPosts, []);
 
   return (
