@@ -97,7 +97,6 @@ app.post('/signup', (req, res) => {
 
 
 app.get('/posts/:post_id', (req, res) => {
-  // Increment the likes count for the post with the given ID
   console.log(`trying to get /posts/:${req.params.post_id}`)
   connection.query('SELECT * FROM posts WHERE post_id = ?', [req.params.post_id], (error, results) => {
     // UPDATE posts SET likes = likes + 1 WHERE post_id = ?', [req.params.post_id], (error, results) => {
@@ -109,8 +108,9 @@ app.get('/posts/:post_id', (req, res) => {
     });
 });
 
-app.get('/posts/:username', (req, res) => { 
+app.get('/feed/:username', (req, res) => { 
   // query the users database to get the user_id for the given username, then query the posts database to get all posts with that user_id
+  console.log(req.params);
   connection.query('SELECT user_id FROM users WHERE username = ?', [req.params.username], (error, results) => {
     if (error) {
       return res.status(500).send({ success: false, message: 'An error occurred' });
@@ -166,7 +166,6 @@ app.get('/username/:user_id', (req, res) => {
     if (error) {
       return res.status(500).send({ success: false, message: 'An error occurred' });
     }
-    console.log(`results of username query: ${results[0].username}`);
     if (results.length > 0) {
       console.log(results[0]);
       const username = results[0].username;
