@@ -13,6 +13,7 @@ interface PostProps {
     created_at: string;
   };
 }
+
 const Post = ({ post }: PostProps) => {
   const [updatedPost, setPost] = useState(post);
   const [username, setUsername] = useState("");
