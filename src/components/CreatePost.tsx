@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { globalStyles } from "../styles/styles";
 import axios from "axios";
+import { useUser } from "../contexts/UserContext";
 
 const CreatePostModal = ({ onPostCreated }) => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -9,8 +10,13 @@ const CreatePostModal = ({ onPostCreated }) => {
     event.preventDefault();
     if (formRef.current) {
       const data = new FormData(formRef.current);
+      // const contextUser = useUser();
+      // console.log(`contextUser is ${contextUser} - in createpost`);
+
+      // get username from local storage
+      const sessionUser = localStorage.getItem("username");
       const post = {
-        user_id: 1,
+        username: sessionUser,
         content: data.get("content") as string,
       };
       axios

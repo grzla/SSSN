@@ -20,9 +20,9 @@ const UserPostsContainer = ({ username }) => {
 
   return (
     <>
-      <div style={styles.container}>
-        <p style={styles.header}>Your Posts</p>
-        <div style={styles.CreatePostContainer}>
+      <div style={globalStyles.container}>
+        <p style={globalStyles.header}>Your Posts</p>
+        <div style={globalStyles.CreatePostContainer}>
           <CreatePost />
         </div>
       </div>

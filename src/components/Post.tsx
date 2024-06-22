@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
 import LikeCount from "./LikeCount";
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 // import LikeButton from "./LikeButton";
 // import DislikeButton from "./DislikeButton";
 
-interface PostProps {
+export interface PostProps {
   post: {
     post_id: number;
     content: string;
-    user_id: number;
+    username: string;
     likes: number;
     created_at: string;
   };
 }
 
-const Post = ({ post }: PostProps) => {
+export const Post: React.FC<PostProps> = ({ post }) => {
   const [updatedPost, setPost] = useState(post);
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState(post.username);
   const [likes, setLikes] = useState(post.likes);
+  const { contextUsername, setContextUsername } = useUser();
+  // console.log(`post.tsx - post.username is ${post.username}`);
 
-  useEffect(() => {
-    // Fetch the user data from your API
-    fetch(`http://127.0.0.1:3001/username/${post.user_id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Update the username state with the username property of the user data
-        setUsername(data.username);
-      });
-  }, []); // Empty dependency array means this effect runs once on mount and not on updates
+  // useEffect(() => {
+  //   // Fetch the user data from your API
+  //   fetch(`http://127.0.0.1:3001/username/${post.username}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // Update the username state with the username property of the user data
+  //       setUsername(data.username);
+  //     });
+  // }, []); // Empty dependency array means this effect runs once on mount and not on updates
 
   const handleLike = () => {
     setLikes(likes + 1);
@@ -56,7 +59,7 @@ const Post = ({ post }: PostProps) => {
 
   const handleDislike = () => {
     setLikes(likes - 1);
-    fetch(`http://127.0.0.1:3001/posts/${post_id}/dislike`, {
+    fetch(`http://127.0.0.1:3001/posts/${post.post_id}/dislike`, {
       method: "POST",
     })
       .then((response) => {
@@ -78,6 +81,13 @@ const Post = ({ post }: PostProps) => {
       });
   };
 
+  const handleUserContext = (e) => {
+    e.preventDefault();
+    setContextUsername(updatedPost.username);
+    console.log(
+      `post.tsx - handleUserContext - usercontext is ${updatedPost.username}`
+    );
+  };
   // Render the post
   return (
     <div style={styles.postContainer}>
@@ -87,8 +97,14 @@ const Post = ({ post }: PostProps) => {
         {new Date(updatedPost.created_at).toLocaleString()}
       </p> */}
       <p style={styles.meta}>
-        Posted by <Link to={`/feed/${username}`}>{username}</Link> at{" "}
-        {new Date(updatedPost.created_at).toLocaleString()}
+        Posted by{" "}
+        <Link
+          to={`/posts/user/${updatedPost.username}`}
+          onClick={handleUserContext}
+        >
+          {updatedPost.username}
+        </Link>{" "}
+        at {new Date(updatedPost.created_at).toLocaleString()}
       </p>
       <button onClick={handleLike}>Like</button>
       <button onClick={handleDislike}>Dislike</button>
@@ -116,4 +132,4 @@ export const styles = {
   },
 };
 
-export default Post;
+// export default Post;

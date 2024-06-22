@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -21,6 +24,11 @@ const Signup = () => {
 
         if (response.ok) {
           console.log("User registered successfully");
+          // const { setUsername } = useUser();
+          // setUsername(username);
+          // set username in local storage
+          localStorage.setItem("username", username);
+          navigate("/feed");
         } else {
           console.log("Failed to register user");
         }

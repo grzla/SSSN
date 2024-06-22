@@ -6,7 +6,9 @@ const AppBar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     console.log("Logout");
-    navigate("/login");
+    // remove username from local storage
+    localStorage.removeItem("username");
+    navigate("/");
   };
 
   return (

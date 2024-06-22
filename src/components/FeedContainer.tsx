@@ -1,33 +1,39 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext";
 import { globalStyles } from "../styles/styles";
 import CreatePost from "./CreatePost";
-import Post from "./Post";
+import { Post, PostProps } from "./Post";
 import axios from "axios";
 
 const FeedContainer = () => {
   const [posts, setPosts] = useState([]);
   // const { username } = useContext(UserContext); // Destructure username from context
-  const { username } = useUser();
+  const { contextUsername, setContextUsername } = useUser();
 
   const fetchPosts = () => {
-    let url = "http://localhost:3001/posts";
-    console.log(`feedcontainer/username is ${username}`);
-    if (username) {
-      url += `?username=${username}`; // Assuming the backend supports filtering by username via query parameters
+    let url = `http://localhost:3001/posts`;
+    console.log(`feedcontainer/contextUsername is ${contextUsername}`);
+    if (contextUsername) {
+      url += `/user/${contextUsername}`; // Adjusted to match the path parameter structure
     }
 
-    axios
-      .get(url)
+    fetch(url)
       .then((response) => {
-        setPosts(response.data);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(`feedcontainer. data from user endpoint: ${data}`);
+        setPosts(data);
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
       });
   };
 
-  useEffect(fetchPosts, [username]); // Re-fetch posts if the username context changes
+  useEffect(fetchPosts, [contextUsername]); // Re-fetch posts if the username context changes
 
   return (
     <>
@@ -40,7 +46,7 @@ const FeedContainer = () => {
       <div id="feed" style={styles.feed}>
         {posts.length > 0 ? (
           posts
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            // .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
             .map((post) => <Post key={post.post_id} post={post} />)
         ) : (
           <p style={globalStyles.text}>No posts available</p>

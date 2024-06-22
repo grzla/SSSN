@@ -8,6 +8,7 @@ import cors from 'cors'
 
 const app = express();
 app.use(express.json());
+
 app.use(cors()); // Enable CORS
 
 const connection = mysql.createConnection({
@@ -24,19 +25,19 @@ connection.connect((err) => {
 
 
 app.post('/submit-post', (req, res) => {
-  const { user_id, content } = req.body;
+  const { username, content } = req.body;
 
   // Verify user_id is valid
-  const userQuery = 'SELECT * FROM users WHERE user_id = ?';
-  connection.query(userQuery, [user_id], (userErr, userResult) => {
-    if (userErr || userResult.length === 0) {
-      console.error(userErr);
-      return res.status(400).send('Invalid user ID');
-    }
+  // const userQuery = 'SELECT * FROM users WHERE user_id = ?';
+  // connection.query(userQuery, [username], (userErr, userResult) => {
+    // if (userErr || userResult.length === 0) {
+    //   console.error(userErr);
+    //   return res.status(400).send('Invalid user ID');
+    // }
 
     const created_at = new Date();
-    const query = 'INSERT INTO posts (user_id, content, created_at) VALUES (?, ?, ?)';
-    connection.query(query, [user_id, content, created_at], (err, result) => {
+    const query = 'INSERT INTO posts (username, content, created_at) VALUES (?, ?, ?)';
+    connection.query(query, [username, content, created_at], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send('Server error');
@@ -45,7 +46,7 @@ app.post('/submit-post', (req, res) => {
       }
     });
   });
-});
+;
 
 app.get('/posts', (req, res) => {
   const query = 'SELECT * FROM posts';
@@ -108,28 +109,33 @@ app.get('/posts/:post_id', (req, res) => {
     });
 });
 
-app.get('/feed/:username', (req, res) => { 
+app.get('/posts/user/:username', (req, res) => { 
+  const { username } = req.params;
   // query the users database to get the user_id for the given username, then query the posts database to get all posts with that user_id
-  console.log(req.params);
-  connection.query('SELECT user_id FROM users WHERE username = ?', [req.params.username], (error, results) => {
-    if (error) {
-      return res.status(500).send({ success: false, message: 'An error occurred' });
-    }
+  // console.log(req.params);
+  // connection.query('SELECT user_id FROM users WHERE username = ?', [req.params.username], (error, results) => {
+  //   if (error) {
+  //     return res.status(500).send({ success: false, message: 'An error occurred' });
+  //   }
 
-    if (results.length > 0) {
-      const user_id = results[0].user_id;
-      connection.query('SELECT * FROM posts WHERE user_id = ?', [user_id], (error, results) => {
+      // const username = localStorage.getItem('username');
+      console.log(`req.params.username: ${username}`);
+      connection.query('SELECT * FROM posts WHERE username = ?', [username], (error, results) => {
         if (error) {
           return res.status(500).send({ success: false, message: 'An error occurred' });
         }
-
-        res.send({ success: true, posts: results });
+        else {
+          res.set('Cache-Control', 'no-store');
+          // res.send({ success: true, posts: results });
+          res.status(200).send(results);
+        }
       });
-    } else {
-      res.status(404).send({ success: false, message: 'User not found' });
-    }
-  });
-});
+    })
+//     } else {
+//       res.status(404).send({ success: false, message: 'User not found' });
+//     }
+//   });
+// });
 
 app.post('/posts/:post_id/like', (req, res) => {
   // Increment the likes count for the post with the given ID
@@ -160,21 +166,21 @@ app.post('/posts/:post_id/dislike', (req, res) => {
   });
 });
 
-app.get('/username/:user_id', (req, res) => {
-  // get the username for the user with the given user_id
-  connection.query('SELECT username FROM users WHERE user_id = ?', [req.params.user_id], (error, results) => {
-    if (error) {
-      return res.status(500).send({ success: false, message: 'An error occurred' });
-    }
-    if (results.length > 0) {
-      console.log(results[0]);
-      const username = results[0].username;
-      res.send({ success: true, username: username });
-    } else {
-      res.status(404).send({ success: false, message: 'User not found' });
-    }
-  });
-});
+// app.get('/username/:user_id', (req, res) => {
+//   // get the username for the user with the given user_id
+//   connection.query('SELECT username FROM users WHERE user_id = ?', [req.params.user_id], (error, results) => {
+//     if (error) {
+//       return res.status(500).send({ success: false, message: 'An error occurred' });
+//     }
+//     if (results.length > 0) {
+//       console.log(results[0]);
+//       const username = results[0].username;
+//       res.send({ success: true, username: username });
+//     } else {
+//       res.status(404).send({ success: false, message: 'User not found' });
+//     }
+//   });
+// });
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

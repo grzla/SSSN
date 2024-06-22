@@ -3,23 +3,24 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // Define the shape of the context's value
 interface UserContextType {
-  username: string;
-  setUsername: (username: string) => void;
+  contextUsername: string;
+  setContextUsername: (username: string) => void;
 }
 
 // Create the context with a default value
 // Specify the context type and provide an initial value that matches the type
 const UserContext = createContext<UserContextType | undefined>(undefined);
+// const UserContext = createContext<UserContextType>({ username: "greg" });
 
 interface UserProviderProps {
   children: ReactNode;
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [username, setUsername] = useState<string>("");
+  const [contextUsername, setContextUsername] = useState<string>("");
 
   return (
-    <UserContext.Provider value={{ username, setUsername }}>
+    <UserContext.Provider value={{ contextUsername, setContextUsername }}>
       {children}
     </UserContext.Provider>
   );

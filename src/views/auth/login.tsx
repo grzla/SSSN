@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useUser } from "../../contexts/UserContext";
+// import { useUser } from "../../contexts/UserContext";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  // const { setUsername: setContextUsername } = useUser(); // Use setUsername from UserContext at the top level
+  // setContextUsername(username); // Update the username in the context
   const navigate = useNavigate();
-  const { username, setUsername: setUserContextUsername } = useUser(); // Use username and setUsername from UserContext
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -15,7 +17,9 @@ const Login = () => {
         username,
         password,
       });
-      navigate("/feed");
+      navigate("/posts");
+      // set username in local storage
+      localStorage.setItem("username", username);
     } catch (error) {
       console.error("Failed to login", error);
       // Handle error here
@@ -31,7 +35,7 @@ const Login = () => {
           <input
             type="text"
             value={username}
-            onChange={(e) => setUserContextUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </label>
         <label>
